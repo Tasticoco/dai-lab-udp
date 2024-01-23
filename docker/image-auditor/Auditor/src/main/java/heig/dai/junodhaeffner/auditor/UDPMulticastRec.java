@@ -8,11 +8,11 @@ import java.net.DatagramPacket;
 import static java.nio.charset.StandardCharsets.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class UDPMulticastRec {
+public class UDPMulticastRec implements Runnable{
     final static String IPADDRESS = "239.255.22.5";
     final static int PORT = 9904;
 
-    public static void main(String[] args) {
+    public void run() {
         try (MulticastSocket socket = new MulticastSocket(PORT)) {
             InetSocketAddress group_address =  new InetSocketAddress(IPADDRESS, PORT);
             NetworkInterface netif = NetworkInterface.getByName("eth0");
