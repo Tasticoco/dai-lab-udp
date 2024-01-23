@@ -36,7 +36,15 @@ class MulticastSender {
             var packet = new DatagramPacket(payload,
                     payload.length,
                     dest_address);
-            socket.send(packet);
+            while (true){
+                System.out.println(json);
+                socket.send(packet);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         } catch (
                 IOException ex) {
             System.out.println(ex.getMessage());
