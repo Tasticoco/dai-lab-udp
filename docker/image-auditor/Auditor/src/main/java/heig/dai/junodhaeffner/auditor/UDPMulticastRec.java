@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.DatagramPacket;
 import static java.nio.charset.StandardCharsets.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UDPMulticastRec {
     final static String IPADDRESS = "239.255.22.5";
@@ -19,11 +20,19 @@ public class UDPMulticastRec {
 
             byte[] buffer = new byte[1024];
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            socket.receive(packet);
-            String message = new String(packet.getData(), 0, packet.getLength(), UTF_8);
+            while(true){
+                socket.receive(packet);
+                String message = new String(packet.getData(), 0, packet.getLength(), UTF_8);
 
-            System.out.println("Received message: " + message + " from " + packet.getAddress() + ", port " + packet.getPort());
-            socket.leaveGroup(group_address, netif);
+                ObjectMapper objectMapper = new ObjectMapper();
+                Musician musician = objectMapper.readValue(message, Musician.class);
+
+                if(Auditor.musicians.containsKey(musician.getUuid())){
+                    Auditor.musicians.get(musician.getUuid()).updateLastActivity();
+                }else{
+                    Auditor.musicians.put(musician.getUuid(), musician);
+                }
+            }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

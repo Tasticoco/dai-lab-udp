@@ -3,6 +3,8 @@ package heig.dai.junodhaeffner.auditor;
 import java.io.*;
 import java.net.*;
 import static java.nio.charset.StandardCharsets.*;
+import java.sql.Timestamp;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TCPTextServer {
 
