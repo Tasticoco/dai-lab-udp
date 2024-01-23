@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static java.nio.charset.StandardCharsets.*;
@@ -25,19 +24,22 @@ class MulticastSender {
         Instrument instrument = Instrument.valueOf(args[0]);
         Musician musician = new Musician(instrument);
 
-        System.out.println(objectMapper.writeValueAsString(musician));
-//        try (DatagramSocket socket = new DatagramSocket()) {
-//
-//            String message = "Hello everybody!";
-//            byte[] payload = message.getBytes(UTF_8);
-//            var dest_address = new InetSocketAddress(IPADDR, 44444);
-//            var packet = new DatagramPacket(payload,
-//                    payload.length,
-//                    dest_address);
-//            socket.send(packet);
-//        } catch (
-//                IOException ex) {
-//            System.out.println(ex.getMessage());
-//        }
+        var json = objectMapper.writeValueAsString(musician);
+
+        //Printing what we send
+        System.out.println(json);
+
+        try (DatagramSocket socket = new DatagramSocket()) {
+
+            byte[] payload = json.getBytes(UTF_8);
+            var dest_address = new InetSocketAddress(IPADDR, PORT);
+            var packet = new DatagramPacket(payload,
+                    payload.length,
+                    dest_address);
+            socket.send(packet);
+        } catch (
+                IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }
