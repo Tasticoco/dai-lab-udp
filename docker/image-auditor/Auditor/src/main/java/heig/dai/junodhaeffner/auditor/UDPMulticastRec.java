@@ -7,12 +7,15 @@ import java.net.NetworkInterface;
 import java.net.DatagramPacket;
 import static java.nio.charset.StandardCharsets.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class UDPMulticastRec implements Runnable{
     final static String IPADDRESS = "239.255.22.5";
     final static int PORT = 9904;
 
     public void run() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
         try (MulticastSocket socket = new MulticastSocket(PORT)) {
             InetSocketAddress group_address =  new InetSocketAddress(IPADDRESS, PORT);
             NetworkInterface netif = NetworkInterface.getByName("eth0");
@@ -24,8 +27,9 @@ public class UDPMulticastRec implements Runnable{
                 socket.receive(packet);
                 String message = new String(packet.getData(), 0, packet.getLength(), UTF_8);
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                Musician musician = objectMapper.readValue(message, Musician.class);
+                JsonNode jsonNode = objectMapper.readTree(message);
+
+                Musician musician = new Musician(jsonNode.get("uuid").asText(), jsonNode.get("sound").asText());
 
                 if(Auditor.musicians.containsKey(musician.getUuid())){
                     Auditor.musicians.get(musician.getUuid()).updateLastActivity();
