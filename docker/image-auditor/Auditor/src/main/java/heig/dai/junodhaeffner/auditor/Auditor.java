@@ -2,6 +2,13 @@ package heig.dai.junodhaeffner.auditor;
 
 import java.util.HashMap;
 
+/**
+ * This class is the main class of the auditor. It starts the TCPTextServer and
+ * the UDPMulticastRec threads.
+ *
+ * @author Arthur Junod, Edwin Haeffner
+ * @date 26/01/2024
+ */
 public class Auditor {
 
     public static HashMap<String, Musician> musicians = new HashMap<>();

@@ -1,5 +1,11 @@
 package heig.dai.junodhaeffner.musician;
 
+/**
+ * enum Instrument, contains the instruments and their sounds
+ *
+ * @author Arthur Junod, Edwin Haeffner
+ * @date 26/01/2024
+ */
 public enum Instrument {
     piano("ti-ta-ti"),
     trumpet("pouet"),

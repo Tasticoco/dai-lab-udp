@@ -1,8 +1,13 @@
 package heig.dai.junodhaeffner.auditor;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.sql.Timestamp;
 
+/**
+ * Musician class, contains the uuid, the instrument and the last activity of a musician
+ *
+ * @author Arthur Junod, Edwin Haeffner
+ * @date 26/01/2024
+ */
 public class Musician {
     private final Instrument instrument;
     private final String uuid;
@@ -20,6 +25,9 @@ public class Musician {
         lastActivity = new Timestamp(System.currentTimeMillis());
     }
 
+    /**
+     * Update the last activity of the musician to the current time
+     */
     public void updateLastActivity() {
         lastActivity = new Timestamp(System.currentTimeMillis());
     }
@@ -30,6 +38,11 @@ public class Musician {
 
     public String getUuid(){
         return uuid;
+    }
+
+    // Used for the json serialization
+    public Instrument getInstrument(){
+        return instrument;
     }
 
 }
