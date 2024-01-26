@@ -1,5 +1,10 @@
-FROM openjdk:21
+FROM maven:3.9.6-eclipse-temurin-21-alpine
 
-COPY ./Musician/target/musician-1.0-jar-with-dependencies.jar ./
+COPY ./Musician/pom.xml ./pom.xml
+COPY ./Musician/src ./src
 
-ENTRYPOINT ["java", "-jar", "musician-1.0-jar-with-dependencies.jar"]
+RUN mvn clean package
+
+EXPOSE 2205
+
+ENTRYPOINT ["java", "-jar", "./target/musician-1.0-jar-with-dependencies.jar"]
